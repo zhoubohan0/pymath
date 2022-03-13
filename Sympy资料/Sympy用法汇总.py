@@ -8,12 +8,14 @@ from sympy import *
 import matplotlib.pyplot as plt
 from scipy.integrate import quad
 
+
 def toeplitz(n):
     '''托普利兹矩阵:主对角线上的元素相等，平行于主对角线的线上的元素也相等；
     矩阵中的各元素关于次对角线对称，即T型矩阵为次对称矩阵。'''
     a = sp.symbols('a:' + str(2 * n - 1))
     f = lambda i, j: a[i - j + n - 1]
     return sp.Matrix(n, n, f)
+
 
 def conditions(args):
     '''优化化问题中的限制条件'''
@@ -28,8 +30,6 @@ def conditions(args):
 
 
 if __name__ == '__main__':
-    print('#'*30+'Sympy基础'+'#'*30)
-
     '''1.Sympy
     1.1. 符号变量的定义：符号变量、符号函数、符号矩阵、字符串确定表达式
     1.2. Lambda function、符号替换
@@ -40,50 +40,50 @@ if __name__ == '__main__':
     1.7. 数学计算:求和、求导(偏导)、积分(不定、定、多重不定、多重定)
     1.8. 数学契合：一些数学常量表示
     '''
-    #1.1.符号变量的定义
-    print('*'*50+'符号变量的定义'+'*'*50)
+    # 1.1.符号变量的定义
+    print('*' * 50 + '符号变量的定义' + '*' * 50)
     print('\033[1;45m 这部分自己调试学习写法 \033[0m')
-    x,y,z=symbols('x y z')      #等效于x,y,z=symbols('x,y,z'),Symbol对象
-    #整组符号的定义
-    integer_variables=symbols('I:L',interger=True)  #tuple(Symbol)
-    real_variables=symbols('a:d',real=True)         #tuple(Symbol)
-    A=symbols('A1:3(1:4)')                          #tuple(Symbol)
-    #符号函数
-    f=Function('f')
-    f,g=symbols('f g',cls=Function) #同时定义多个符号函数
-    #符号矩阵
+    x, y, z = symbols('x y z')  # 等效于x,y,z=symbols('x,y,z'),Symbol对象
+    # 整组符号的定义
+    integer_variables = symbols('I:L', interger=True)  # tuple(Symbol)
+    real_variables = symbols('a:d', real=True)  # tuple(Symbol)
+    A = symbols('A1:3(1:4)')  # tuple(Symbol)
+    # 符号函数
+    f = Function('f')
+    f, g = symbols('f g', cls=Function)  # 同时定义多个符号函数
+    # 符号矩阵
     print('符号矩阵：')
     M = sp.Matrix(3, 3, sp.symbols('m:3(:3)'))
     print(M)
     T = toeplitz(5);
     print(T)
-    #定义多元函数示例
+    # 定义多元函数示例
     print('定义多元函数：')
     x = symbols('x:3')  # 输出：(x0, x1, x2)
     f = Function('f')  # 定义符号函数
     print(f(*x))  # 输出：f(x0, x1, x2)
-    #根据字符串确定表达式
-    expr='x**2+2*x+1'
-    expr=simplify(expr)
+    # 根据字符串确定表达式
+    expr = 'x**2+2*x+1'
+    expr = simplify(expr)
     print(expr)
 
-    #1.2. Lambda function
-    print('*'*50+'Lambda函数'+'*'*50)
-    #Lambda表达式的创建与带入值计算
-    x,y,c,rho,a,v=sp.symbols('x,y,c,rho,a,v')
-    f=sp.Lambda(v,-sp.Rational(1,2)*c*rho*a*v**2)
-    z=sp.Lambda((x,y),sp.sin(x)+sp.cos(2*y))
-    print(f'这是关于{f.args[0]}的方程:{f.args[1]}')    #f.args[0]表示自变量元组，可能有一个或多个；f.args[1]表示公式，是公式对象只有一个式子
-    v=1
+    # 1.2. Lambda function
+    print('*' * 50 + 'Lambda函数' + '*' * 50)
+    # Lambda表达式的创建与带入值计算
+    x, y, c, rho, a, v = sp.symbols('x,y,c,rho,a,v')
+    f = sp.Lambda(v, -sp.Rational(1, 2) * c * rho * a * v ** 2)
+    z = sp.Lambda((x, y), sp.sin(x) + sp.cos(2 * y))
+    print(f'这是关于{f.args[0]}的方程:{f.args[1]}')  # f.args[0]表示自变量元组，可能有一个或多个；f.args[1]表示公式，是公式对象只有一个式子
+    v = 1
     print(f'带入数值v={v}计算结果={f(v)}')
-    x=1
-    y=2
+    x = 1
+    y = 2
     print(f'这是关于{z.args[0]}的方程:{z.args[1]}')
-    print(f'带入数值(x,y)={(x,y)}计算结果={z(x,y)}')
+    print(f'带入数值(x,y)={(x, y)}计算结果={z(x, y)}')
 
+    # Lambda表达式可以通过rcall函数对自变量进行整体替换，例如:f=x^2,f.rcall(xsin(x))=x**2*sin(x)**2
+    from sympy.abc import x, y, z  # 重要，不能少
 
-    #Lambda表达式可以通过rcall函数对自变量进行整体替换，例如:f=x^2,f.rcall(xsin(x))=x**2*sin(x)**2
-    from sympy.abc import x, y, z   #重要，不能少
     sympy.init_printing(use_latex='mathjax', forecolor='White')
     sympy.init_printing(use_latex=True, forecolor='White')
 
@@ -99,42 +99,41 @@ if __name__ == '__main__':
     # 可以通过星号表达式的方法把最后表达式输出来，就不用一个一个写参数了
     p = x, y, z
     f = Lambda(p, x + y * z)
-    print('原输出:',f)
-    print('使用星号表达式输出:',f(*p))
+    print('原输出:', f)
+    print('使用星号表达式输出:', f(*p))
 
-
-    #雅可比行列式
-    print('*'*50+'雅可比行列式'+'*'*50)
-    #方式一：正常定义x与y
-    x,y=sp.symbols('x,y')
-    F=sp.Lambda((x,y),sp.Matrix([sp.sin(x)+sp.cos(2*y),sp.sin(x)*sp.cos(y)]))
-    J=F(x,y).jacobian((x,y))
+    # 雅可比行列式
+    print('*' * 50 + '雅可比行列式' + '*' * 50)
+    # 方式一：正常定义x与y
+    x, y = sp.symbols('x,y')
+    F = sp.Lambda((x, y), sp.Matrix([sp.sin(x) + sp.cos(2 * y), sp.sin(x) * sp.cos(y)]))
+    J = F(x, y).jacobian((x, y))
     print(J)
 
-    #方式二：简便定义自变量
+    # 方式二：简便定义自变量
     x = sp.symbols('x:2')
     F = sp.Lambda(x, sp.Matrix([sp.sin(x[0]) + sp.cos(2 * x[1]), sp.sin(x[0]) * sp.cos(x[1])]))
     J = F(*x).jacobian(x)
     print(J)
 
     # 1.3.公式推导
-    print('*'*50+'公式推导'+'*'*50)
+    print('*' * 50 + '公式推导' + '*' * 50)
     # 展开
     x, y, z = symbols('x y z')
-    y = expand((x + y + 1) ** 2+(x + y + 1))
-    print('展开：',y)
+    y = expand((x + y + 1) ** 2 + (x + y + 1))
+    print('展开：', y)
     # 折叠
-    y=y.factor()
-    print('折叠：',y)
+    y = y.factor()
+    print('折叠：', y)
     # 因式分解
     z = factor(y)
-    print('因式分解:',z)
+    print('因式分解:', z)
     # 合并同类项
     g = collect(y, x)
-    print('合并同类项：',g)
+    print('合并同类项：', g)
     # 因式拆解
     p = apart(1 / ((1 + x) * (3 + x)))
-    print('因式拆解：',p)
+    print('因式拆解：', p)
     # 化简
     s = simplify(2 * sin(x) * cos(x))
     print('化简：', p)
@@ -142,33 +141,33 @@ if __name__ == '__main__':
     s = cancel((x ** 2 + 2 * x + 1) / (x ** 2 + x))
     print('有理分式化简：', p)
 
-    #1.4.符号替换、符号的值转化、公式简化
+    # 1.4.符号替换、符号的值转化、公式简化
     '''
     a.subs(x,0)
     a.subs({x:0,a:1})       多替换
     a.subs([(x,0),(a,1)])   （旧值,新值）对照表
     '''
-    print('*'*50+'符号替换'+'*'*50)
-    x,a=sp.symbols('x,a')
-    b=x+a;
-    c=b.subs(x,0)
-    d=c.subs(a,2*a)
-    print(c,d)
+    print('*' * 50 + '符号替换' + '*' * 50)
+    x, a = sp.symbols('x,a')
+    b = x + a;
+    c = b.subs(x, 0)
+    d = c.subs(a, 2 * a)
+    print(c, d)
 
-    #1.4.1 利用T矩阵构造三对角线矩阵
+    # 1.4.1 利用T矩阵构造三对角线矩阵
     T = toeplitz(5)
     symbs = [sp.symbols('a' + str(i)) for i in range(9) if i < 3 or i > 5]
     substitution = list(zip(symbs, [0] * len(symbs)))
     T0 = T.subs(substitution);
     print(T0)
 
-    #1.4.2符号值转化成浮点型：使用.evalf()或者.n()方法
-    x1=sp.sin(1)
-    x2=x1.evalf()  #转换为浮点值
-    x3=x1.n()       #x2与x3等效
+    # 1.4.2符号值转化成浮点型：使用.evalf()或者.n()方法
+    x1 = sp.sin(1)
+    x2 = x1.evalf()  # 转换为浮点值
+    x3 = x1.n()  # x2与x3等效
     print(x1)
-    print(x2)  #显示符号值和浮点值
-    print(x3)  #显示符号值和浮点值
+    print(x2)  # 显示符号值和浮点值
+    print(x3)  # 显示符号值和浮点值
 
     # 运用evalf函数传值
     x = Symbol('x')
@@ -183,50 +182,52 @@ if __name__ == '__main__':
     result = fx.evalf(subs={x: 3, y: 4})
     print(result)
 
-    #1.4.3 公式简化
+    # 1.4.3 公式简化
     # simplify( )一般的化简
-    normal_simplify =simplify((x ** 3 + x ** 2 - x - 1) / (x ** 2 + 2 * x + 1))
-    print('普通简化:',normal_simplify)
+    normal_simplify = simplify((x ** 3 + x ** 2 - x - 1) / (x ** 2 + 2 * x + 1))
+    print('普通简化:', normal_simplify)
 
     # trigsimp( )三角化简
-    trig_simplify=trigsimp(sin(x) / cos(x))
-    print('三角简化:',trig_simplify)
+    trig_simplify = trigsimp(sin(x) / cos(x))
+    print('三角简化:', trig_simplify)
 
     # powsimp( )指数化简
-    pow_simplify=powsimp(x ** a * x ** b)
-    print('指数简化:',pow_simplify)
+    pow_simplify = powsimp(x ** a * x ** b)
+    print('指数简化:', pow_simplify)
 
-    #1.5. 符号函数画图
-    print('*'*50+'符号函数画图'+'*'*50)
-    #1.5.1 二维曲线图：在同一个图上画出
+    # 1.5. 符号函数画图
+    print('*' * 50 + '符号函数画图' + '*' * 50)
+    # 1.5.1 二维曲线图：在同一个图上画出
     # y1=2sin(2x),-3<=x<=3
     # y2=cos(x+pi/4),-4<=x<=4
-    x,pi=sp.symbols('x,pi');
-    sp.plot((2*sp.sin(2*x),(x,-3,3)),(sp.cos(x+pi/3),(x,-4,4)),
-            xlabel='$x$',ylabel='$y$')
+    x, pi = sp.symbols('x,pi');
+    sp.plot((2 * sp.sin(2 * x), (x, -3, 3)), (sp.cos(x + pi / 3), (x, -4, 4)),
+            xlabel='$x$', ylabel='$y$')
 
-
-    #1.5.2 三维曲面画图
+    # 1.5.2 三维曲面画图
     # 画出z=cos(2sqrt(x^2+y^2)+ln(x^2+y^2+1))
     from sympy.plotting import plot3d
-    plt.rc('font',size=16)
-    plt.rc('text',usetex=True)
-    x,y=sp.symbols('x,y');
-    plot3d(sp.cos(2*sp.sqrt(x**2+y**2))+sp.log(x**2+y**2+1),
-           (x,-10,10),(y,-10,10),xlabel='$x$',ylabel='$y$')
 
-    #1.5.3 隐函数画图
-    #方法一：from sympy import plot_implicit as pt,Eq
+    plt.rc('font', size=16)
+    plt.rc('text', usetex=True)
+    x, y = sp.symbols('x,y');
+    plot3d(sp.cos(2 * sp.sqrt(x ** 2 + y ** 2)) + sp.log(x ** 2 + y ** 2 + 1),
+           (x, -10, 10), (y, -10, 10), xlabel='$x$', ylabel='$y$')
+
+    # 1.5.3 隐函数画图
+    # 方法一：from sympy import plot_implicit as pt,Eq
     from sympy import plot_implicit as pt
-    from sympy.abc import x,y   #引进符号变量x,y
-    pt(Eq((x-1)**2+(y-2)**3,4),(x,-6,6),(y,-2,4))
+    from sympy.abc import x, y  # 引进符号变量x,y
 
-    #方法二：使用匿名函数Lambda构造
+    pt(Eq((x - 1) ** 2 + (y - 2) ** 3, 4), (x, -6, 6), (y, -2, 4))
+
+    # 方法二：使用匿名函数Lambda构造
     ezplot = lambda expr: pt(expr)
     ezplot((x - 1) ** 2 + (y - 2) ** 3 - 4)
 
-    #1.5.4 参数方程绘图
-    from sympy.plotting import plot_parametric,plot3d_parametric_line,plot3d_parametric_surface
+    # 1.5.4 参数方程绘图
+    from sympy.plotting import plot_parametric, plot3d_parametric_line, plot3d_parametric_surface
+
     u = symbols('u')
     plot_parametric(cos(u), sin(u), (u, -5, 5))
     plot3d_parametric_line(cos(u), sin(u), u, (u, -5, 5))
@@ -234,8 +235,8 @@ if __name__ == '__main__':
     u, v = symbols('u v')
     plot3d_parametric_surface(cos(u + v), sin(u - v), u - v, (u, -5, 5), (v, -5, 5))
 
-    #1.6.求解方程
-    print('*'*50+'求解方程'+'*'*50)
+    # 1.6.求解方程
+    print('*' * 50 + '求解方程' + '*' * 50)
 
     # 1.6.1 求解普通方程（无论是有数值解还是没有数值解都能解）
     x = symbols('x')
@@ -271,14 +272,13 @@ if __name__ == '__main__':
     result = dsolve(Eq(eq, 0), y(x))
     print(f'{result.args[0]}={result.args[1]}')  # Eq(eq,0)等效为等式的左右两边，dsolve(公式，求解对象)
 
-
-    #1.6.4 偏微分方程
+    # 1.6.4 偏微分方程
     '''题目在这里：https://i.stack.imgur.com/AlboM.png'''
     x1, x2 = sp.symbols('x1, x2')
     f = sp.Function('f')
     phi = f(x1, x2)
     eq = phi.diff(x1) * sp.cos(x2) + phi.diff(x2)
-    print('偏微分方程的解为:',sp.pdsolve(eq))  # f(x1, x2) == F(-x1 + sin(x2))
+    print('偏微分方程的解为:', sp.pdsolve(eq))  # f(x1, x2) == F(-x1 + sin(x2))
 
     # 1.6.5 优化问题
     # 例题：min (2+x1)/(1+x2)-3x1+4x3
@@ -306,16 +306,12 @@ if __name__ == '__main__':
     s = summation(f, (n, 1, 100))  # summation(函数, (自变量, 下限, 上限))
     print('求和结果:', s)
 
-
-
     # # 解求和方程（程序没问题，单独开一个.py运行）
     # x = Symbol('x')
     # i = Symbol('i')
     # f = summation(x, (i, 1, 5)) + 10 * x - 15  # 解释一下，i能够看做是循环变量，便是x自己加五次
     # result = solve(f, x)
     # print('求和方程结果:', result)
-
-
 
     # 1.7.2 求极限
     # 求极限运用limit办法
@@ -397,8 +393,6 @@ if __name__ == '__main__':
     q = integrate(p, x, x, x)
     print('多重不定积分结果：', q)
 
-
-
     # 1.8.数学契合
     print('*' * 50 + '数学契合' + '*' * 50)
     # 虚数单位i
@@ -419,10 +413,3 @@ if __name__ == '__main__':
     sympy.sin(sympy.pi)
     sympy.tan(sympy.pi / 4)
     sympy.cos(sympy.pi / 2)
-
-
-
-
-
-
-
